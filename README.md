@@ -12,45 +12,21 @@
 
 ### **Key Indicators of Compromise (IOCs):**
 
-- **Attack Source IP:** ________________
-- **Compromised Account:** ________________
+- **Attack Source IP:** 159.26.106.84
+- **Compromised Account:** slflare
 - **Malicious File:** ________________
 - **Persistence Mechanism:** ________________
 - **C2 Server:** ________________
 - **Exfiltration Destination:** ________________
 
-### **KQL Queries Used:** *(Document your investigation methodology)*
 
 **Query 1 - Initial Access Detection:**
-
-let StartTime = datetime(2025-09-14T00:00:00Z);
-let EndTime = datetime(2025-09-30T23:59:59Z);
-
-//Checks logon  events from 9/14 - 9/30 shows remote access with successful log on attempts from 159.26.106.84
-| where Timestamp between (StartTime .. EndTime)
-| where DeviceName contains "flare"
-| where AccountName == "slflare"
-| project Timestamp, DeviceName, RemoteIP, AccountName, AccountDomain, ActionType, RemoteDeviceName, FailureReason
-| order by Timestamp asc 
+Remote device sanc-main (IP: 159.26.106.84) gained initial unauthorized access on September 16, 2025 and maintained persistent access through September 28, 2025. After the user changed their password, the attacker conducted a password spray attack which locked the account. The account was subsequently unlocked — likely by an insider or compromised admin — restoring attacker access within approximately 9 minutes. This sequence indicates a multi-phase, potentially assisted intrusion.
+<br><br><br>
+<img width="1430" height="958" alt="image" src="https://github.com/user-attachments/assets/9d4e7002-0d0f-4ce6-8ef4-3694ef1ac26a" />
+<img width="941" height="857" alt="image" src="https://github.com/user-attachments/assets/5ec6b75c-5e69-4aac-b812-16450757ae3f" />
 
 
-//basic information
-DeviceLogonEvents
-| where Timestamp between (StartTime .. EndTime)
-| where DeviceName contains "flare"
-| where AccountName contains "slflare"
 
-
-| summarize 
-    Failures = countif(ActionType == "LogonFailed"),
-    Successes = countif(ActionType == "LogonSuccess")
-    by AccountName
-| order by Failures desc
-
-
-// Check if sanc-main is a known device in your environment
-DeviceInfo
-| where Timestamp between (StartTime .. EndTime)
-| where DeviceName == "sanc-mai"
 
 
