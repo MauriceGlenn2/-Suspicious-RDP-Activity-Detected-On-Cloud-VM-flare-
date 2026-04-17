@@ -17,7 +17,7 @@
 - **Malicious File:** msupdate.exe
 - **Persistence Mechanism:** "TaskName":"\\MicrosoftUpdateSync"
 - **C2 Server:** 185.92.220.87
-- **Exfiltration Destination:** ________________
+- **Exfiltration Destination:** 185.92.220.87:8081
 
 
 # Query 1 - Initial Access Detection T1059.003, T1204.002:
