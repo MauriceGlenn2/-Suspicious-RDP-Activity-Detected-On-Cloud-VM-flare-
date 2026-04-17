@@ -56,6 +56,38 @@ Eleven days later on September 27, the attacker came back and exfiltrated a seco
 
 <img width="1997" height="716" alt="image" src="https://github.com/user-attachments/assets/296a17d8-f59c-4478-ae65-ca91c9688323" />
 
+# Incident Summary
+On September 16, 2025, a remote device with IP address 159.26.106.84 gained unauthorized access to the cloud VM belonging to the account slflare. The attacker maintained persistent access through September 28, 2025. At some point the user changed their password, but the attacker responded with a password spray attack that locked the account. The account was then unlocked within 9 minutes, likely by an insider or compromised admin account, restoring attacker access.
+Once inside, the attacker executed a malicious file called msupdate.exe, disguised to look like a legitimate Microsoft update. This file ran a PowerShell script called update_check.ps1 with security controls bypassed. The attacker then created a persistent scheduled task named MicrosoftUpdateSync, designed to automatically run a hidden PowerShell script every time the system booted, ensuring they maintained access even through restarts.
+On September 27, 2025, the attacker ran two additional malicious executables, payload.exe and winsetup.exe, which systematically disabled Windows Defender and added exclusions for the Temp folder and entire C drive, effectively blinding the antivirus to all malicious activity.
+The attacker then archived stolen data into a file called backup_sync.zip and exfiltrated it to an external C2 server at 185.92.220.87 on port 8081 using both curl and PowerShell. Eleven days later they returned and exfiltrated a second archive called export.7z to an internal host at 10.0.105.104 on port 8083.
+
+
+## Remediation Recommendations
+
+### Immediate
+- Isolate device `slflarewinsysmo` from the network immediately
+- Disable and reset credentials for the `slflare` account
+- Audit all admin accounts that could have unlocked `slflare` — treat as potential insider threat
+- Block `185.92.220.87` and `10.0.105.104` at the firewall
+
+### Remove Persistence
+- Delete scheduled task `MicrosoftUpdateSync`
+- Remove `mscloudsync.ps1` from `C:\ProgramData\Microsoft\Windows\Update\`
+- Hunt for and remove `msupdate.exe`, `payload.exe`, and `winsetup.exe`
+
+### Restore Defenses
+- Re-enable Windows Defender real-time monitoring
+- Remove Defender exclusions for `C:\` and the Temp folder
+- Run a full system scan with updated definitions
+
+### Long Term
+- Enforce MFA on all accounts, especially those with RDP access
+- Restrict RDP to known IPs via firewall allowlist
+- Enable PowerShell script block logging and constrained language mode
+- Alert on scheduled task creation and Defender configuration changes
+- Assess data exposure from `backup_sync.zip` and `export.7z` for breach notification obligations
+
 
 
 
