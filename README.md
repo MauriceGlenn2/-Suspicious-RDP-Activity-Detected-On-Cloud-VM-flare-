@@ -1,4 +1,4 @@
-# -Suspicious-RDP-Activity-Detected-On-Cloud-VM-flare-
+# Suspicious RDP Activity Detected On Cloud VM Flare
 
 # RDP Compromise Incident
 
