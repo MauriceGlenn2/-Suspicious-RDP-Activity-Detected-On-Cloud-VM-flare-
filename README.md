@@ -16,7 +16,7 @@
 - **Compromised Account:** slflare
 - **Malicious File:** msupdate.exe
 - **Persistence Mechanism:** "TaskName":"\\MicrosoftUpdateSync"
-- **C2 Server:** ________________
+- **C2 Server:** 185.92.220.87
 - **Exfiltration Destination:** ________________
 
 
@@ -48,7 +48,13 @@ On September 27, 2025, two suspicious executables, payload.exe and winsetup.exe,
 # Query 5 - Archive Collected Data: Local Archiving T1560.001:
 On September 16, 2025 at 7:41 PM UTC, the user account "slflare" on device "slflarewinsysmo" created the first observed archive file named backup_sync.zip, staged in the user's local Temp folder. This appears to be the starting point of the attacker's data collection and archiving phase.
 <img width="1489" height="709" alt="image" src="https://github.com/user-attachments/assets/10d9288f-9aab-43d3-8a7c-eefb9b990f5a" />
+<br><br><br>
 
+# Query 6 - C2 Connection Destination T1071.001, T1105, T1048.003:
+On September 16, 2025, an attacker using the compromised account SLFlare exfiltrated a file called backup_sync.zip from the device slflarewinsysmo to an external server at 185.92.220.87 on port 8081. They used both curl and PowerShell to upload the file, likely to make sure at least one method succeeded.
+Eleven days later on September 27, the attacker came back and exfiltrated a second file called export.7z, this time sending it to an internal host at 10.0.105.104 on port 8083. The same dual method approach was used again with curl and PowerShell.
+
+<img width="1997" height="716" alt="image" src="https://github.com/user-attachments/assets/296a17d8-f59c-4478-ae65-ca91c9688323" />
 
 
 
